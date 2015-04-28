@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Ricardo Artur Staroski
+ */
 public final class CopySniffer {
 
 	private static final MessageDigest SHA1;
