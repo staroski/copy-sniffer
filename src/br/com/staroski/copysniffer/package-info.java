@@ -1,4 +1,5 @@
 /**
+ * Este pacote contém classes que servem para descobrir arquivos duplicados.
  * 
  * @author Ricardo Artur Staroski
  */
