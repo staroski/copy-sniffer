@@ -10,11 +10,11 @@ import java.util.List;
 /**
  * @author Ricardo Artur Staroski
  */
-public final class Entry implements Iterable<File> {
+public final class Copies implements Iterable<File> {
 
 	private final List<File> files = new ArrayList<>();
 
-	Entry() {}
+	Copies() {}
 
 	public boolean add(File e) {
 		return files.add(e);

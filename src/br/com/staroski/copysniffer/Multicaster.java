@@ -33,31 +33,37 @@ final class Multicaster implements SnifferListener {
 	}
 
 	@Override
-	public void onFileChecked(File file) {
-		a.onFileChecked(file);
-		b.onFileChecked(file);
+	public void onFileCheckFinish(File file) {
+		a.onFileCheckFinish(file);
+		b.onFileCheckFinish(file);
 
 	}
 
 	@Override
-	public void onFileChecking(File file) {
-		a.onFileChecking(file);
-		b.onFileChecking(file);
+	public void onFileCheckStart(File file) {
+		a.onFileCheckStart(file);
+		b.onFileCheckStart(file);
 
 	}
 
 	@Override
-	public void onFolderScanned(File dir) {
-		a.onFolderScanned(dir);
-		b.onFolderScanned(dir);
+	public void onFolderScanFinish(File dir) {
+		a.onFolderScanFinish(dir);
+		b.onFolderScanFinish(dir);
 
 	}
 
 	@Override
-	public void onFolderScanning(File dir) {
-		a.onFolderScanning(dir);
-		b.onFolderScanning(dir);
+	public void onFolderScanStart(File dir) {
+		a.onFolderScanStart(dir);
+		b.onFolderScanStart(dir);
 
+	}
+
+	@Override
+	public void onPossibleCopyFound(File copy, Copies copies) {
+		a.onPossibleCopyFound(copy, copies);
+		b.onPossibleCopyFound(copy, copies);
 	}
 
 	private SnifferListener remove(SnifferListener current) {
@@ -70,7 +76,7 @@ final class Multicaster implements SnifferListener {
 		SnifferListener a2 = remove(a, current);
 		SnifferListener b2 = remove(b, current);
 		if (a2 == a && b2 == b) {
-			return this; // it's not here
+			return this;
 		}
 		return add(a2, b2);
 	}

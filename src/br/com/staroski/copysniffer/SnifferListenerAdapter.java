@@ -8,15 +8,17 @@ import java.io.File;
 public abstract class SnifferListenerAdapter implements SnifferListener {
 
 	@Override
-	public void onFileChecked(File file) {}
+	public void onFileCheckFinish(File file) {}
 
 	@Override
-	public void onFileChecking(File file) {}
+	public void onFileCheckStart(File file) {}
 
 	@Override
-	public void onFolderScanned(File dir) {}
+	public void onFolderScanFinish(File dir) {}
 
 	@Override
-	public void onFolderScanning(File dir) {}
+	public void onFolderScanStart(File dir) {}
 
+	@Override
+	public void onPossibleCopyFound(File copy, Copies copies) {}
 }

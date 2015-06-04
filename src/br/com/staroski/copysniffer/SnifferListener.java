@@ -7,11 +7,13 @@ import java.io.File;
  */
 public interface SnifferListener {
 
-	public void onFileChecked(File file);
+	public void onFileCheckFinish(File file);
 
-	public void onFileChecking(File file);
+	public void onFileCheckStart(File file);
 
-	public void onFolderScanned(File dir);
+	public void onFolderScanFinish(File dir);
 
-	public void onFolderScanning(File dir);
+	public void onFolderScanStart(File dir);
+
+	public void onPossibleCopyFound(File copy, Copies copies);
 }

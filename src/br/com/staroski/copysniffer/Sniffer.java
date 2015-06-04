@@ -23,8 +23,8 @@ public final class Sniffer {
 		this.listener = Multicaster.remove(listener, this.listener);
 	}
 
-	private void scan(File dir, Map<String, Entry> map) {
-		listener.onFolderScanning(dir);
+	private void scan(File dir, Map<String, Copies> map) {
+		listener.onFolderScanStart(dir);
 		File[] files = dir.listFiles();
 		if (files == null) {
 			return;
@@ -33,31 +33,34 @@ public final class Sniffer {
 			if (file.isDirectory()) {
 				scan(file, map);
 			} else {
-				listener.onFileChecking(file);
+				listener.onFileCheckStart(file);
 				String checksum = SHA1.checksum(file);
-				listener.onFileChecked(file);
+				listener.onFileCheckFinish(file);
 				if (checksum == null) {
 					continue;
 				}
-				Entry entry = map.get(checksum);
-				if (entry == null) {
-					entry = new Entry();
-					map.put(checksum, entry);
+				Copies copies = map.get(checksum);
+				if (copies == null) {
+					copies = new Copies();
+					map.put(checksum, copies);
 				}
-				entry.add(file);
+				copies.add(file);
+				if (copies.size() > 1) {
+					listener.onPossibleCopyFound(file, copies);
+				}
 			}
 		}
-		listener.onFolderScanned(dir);
+		listener.onFolderScanFinish(dir);
 	}
 
-	public List<Entry> sniff(File... dirs) {
-		Map<String, Entry> map = new HashMap<>();
+	public List<Copies> sniff(File... dirs) {
+		Map<String, Copies> map = new HashMap<>();
 		for (File dir : dirs) {
 			scan(dir, map);
 		}
-		final List<Entry> entries = new ArrayList<>();
+		final List<Copies> entries = new ArrayList<>();
 		for (String checksum : map.keySet()) {
-			Entry entry = map.get(checksum);
+			Copies entry = map.get(checksum);
 			if (entry.size() > 1) {
 				entries.add(entry);
 			}
@@ -65,7 +68,12 @@ public final class Sniffer {
 		return entries;
 	}
 
-	public List<Entry> sniff(String dir) {
-		return sniff(new File[] { new File(dir) });
+	public List<Copies> sniff(String... dirs) {
+		int count = dirs.length;
+		File[] folders = new File[count];
+		for (int i = 0; i < count; i++) {
+			folders[i] = new File(dirs[i]);
+		}
+		return sniff(folders);
 	}
 }
